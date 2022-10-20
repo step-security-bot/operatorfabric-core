@@ -25,6 +25,8 @@ import {DisplayContext} from '@ofModel/templateGateway.model';
 import {LightCardsStoreService} from '@ofServices/lightcards/lightcards-store.service';
 import {FilterService} from '@ofServices/lightcards/filter.service';
 import {ConfigService} from '@ofServices/config.service';
+import {RRule} from 'rrule';
+import rrulePlugin from '@fullcalendar/rrule';
 
 @Component({
     selector: 'of-calendar',
@@ -124,20 +126,30 @@ export class CalendarComponent implements OnInit, OnDestroy, AfterViewInit {
                             const endDate = new Date(timespan.end.valueOf());
 
                             if (timespan.recurrence) {
+
                                 this.calendarEvents = this.calendarEvents.concat({
                                     // add new event data. must create new array
                                     id: card.id,
                                     title: card.titleTranslated,
                                     allDay: false,
-                                    startRecur: startDate,
-                                    endRecur: endDate,
+                                    /*startRecur: startDate,
+                                    endRecur: endDate,*/
                                     className: [
                                         'opfab-calendar-event',
                                         'opfab-calendar-event-' + card.severity.toLowerCase()
                                     ],
-                                    daysOfWeek: this.getDaysOfWeek(timespan),
-                                    months: this.getMonths(timespan),
-                                    startTime: timespan.recurrence.hoursAndMinutes
+                                    /*rrule: rule,*/
+                                    rrule: {
+                                        freq: 'weekly',
+                                        //interval: 5,
+                                        byweekday: this.getDaysOfWeek(timespan), //[ 'mo', 'fr' ]
+                                        bymonth: this.getMonths(timespan),
+                                        dtstart: startDate, // will also accept '20120201T103000'
+                                        until: endDate, // will also accept '20120201'
+                                        byhour: timespan.recurrence.hoursAndMinutes.hours,
+                                        byminute: timespan.recurrence.hoursAndMinutes.minutes
+                                    },
+                                    /*startTime: timespan.recurrence.hoursAndMinutes
                                         ? CalendarComponent.formatTwoDigits(timespan.recurrence.hoursAndMinutes.hours) +
                                           ':' +
                                           CalendarComponent.formatTwoDigits(timespan.recurrence.hoursAndMinutes.minutes)
@@ -147,7 +159,7 @@ export class CalendarComponent implements OnInit, OnDestroy, AfterViewInit {
                                               timespan.recurrence.hoursAndMinutes,
                                               timespan.recurrence.durationInMinutes
                                           )
-                                        : null
+                                        : null*/
                                 });
                             } else {
                                 this.calendarEvents = this.calendarEvents.concat({
@@ -177,8 +189,12 @@ export class CalendarComponent implements OnInit, OnDestroy, AfterViewInit {
     {
         let daysOfWeek = [];
         if (timeSpan.recurrence) {
-         if (timeSpan.recurrence.daysOfWeek) daysOfWeek = timeSpan.recurrence.daysOfWeek.map((d) => d % 7);
-         else daysOfWeek = [0,1,2,3,4,5,6];
+            if (timeSpan.recurrence.daysOfWeek) {
+                daysOfWeek = timeSpan.recurrence.daysOfWeek.map((d) => d - 1);
+                //daysOfWeek = timeSpan.recurrence.daysOfWeek;
+            } else {
+                daysOfWeek = [0,1,2,3,4,5,6];
+            }
         }
         return daysOfWeek;
     }
@@ -187,8 +203,9 @@ export class CalendarComponent implements OnInit, OnDestroy, AfterViewInit {
     {
         let months = [];
         if (timeSpan.recurrence) {
-            if (timeSpan.recurrence.months){
-                months = timeSpan.recurrence.months.map((d) => d % 12);
+            if (timeSpan.recurrence.months) {
+                months = timeSpan.recurrence.months.map((d) => d + 1);
+                //months = timeSpan.recurrence.months;
             } else {
                 months = [0,1,2,3,4,5,6,7,8,9,10,11];
             }

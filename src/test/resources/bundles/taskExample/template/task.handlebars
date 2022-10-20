@@ -35,6 +35,7 @@ At {{card.data.hours}}:{{card.data.minutes}} on
       cardTemplate = {
             init: function() {
                   const daysOfWeek = "{{card.data.daysOfWeek}}";
+<<<<<<< Updated upstream
                   let text ="";
                   if (daysOfWeek.includes("1"))   text += " monday";
                   if (daysOfWeek.includes("2"))   text += " tuesday";
@@ -45,6 +46,36 @@ At {{card.data.hours}}:{{card.data.minutes}} on
                   if (daysOfWeek.includes("7"))  text += " sunday";
 
                   document.getElementById("dayOfWeeks").innerHTML = text;
+=======
+                  let textForDaysOfWeek ="";
+                  if (daysOfWeek.includes("1"))  textForDaysOfWeek += " Monday";
+                  if (daysOfWeek.includes("2"))  textForDaysOfWeek += " Tuesday";
+                  if (daysOfWeek.includes("3"))  textForDaysOfWeek += " Wednesday";
+                  if (daysOfWeek.includes("4"))  textForDaysOfWeek += " Thursday ";
+                  if (daysOfWeek.includes("5"))  textForDaysOfWeek += " Friday";
+                  if (daysOfWeek.includes("6"))  textForDaysOfWeek += " Saturday";
+                  if (daysOfWeek.includes("7"))  textForDaysOfWeek += " Sunday";
+                  if (textForDaysOfWeek !== "")  textForDaysOfWeek = "on" + textForDaysOfWeek;
+                  document.getElementById("dayOfWeeks").innerHTML = textForDaysOfWeek;
+
+                  const months = "{{card.data.months}}";
+                  let textForMonths ="";
+                  console.log('--------');
+                  if (months.includes("0"))  textForMonths += " January";
+                  if (months.includes("1"))  textForMonths += " February";
+                  if (months.includes("2"))  textForMonths += " March";
+                  if (months.includes("3"))  textForMonths += " April ";
+                  if (months.includes("4"))  textForMonths += " May";
+                  if (months.includes("5"))  textForMonths += " June";
+                  if (months.includes("6"))  textForMonths += " July";
+                  if (months.includes("7"))  textForMonths += " August";
+                  if (months.includes("8"))  textForMonths += " September";
+                  if (months.includes("9"))  textForMonths += " October";
+                  if (months.includes("10")) textForMonths += " November";
+                  if (months.includes("11")) textForMonths += " December";
+                  if (textForMonths !== "")  textForMonths = "in" + textForMonths;
+                  document.getElementById("months").innerHTML = textForMonths;
+>>>>>>> Stashed changes
             }
       }
       cardTemplate.init();
