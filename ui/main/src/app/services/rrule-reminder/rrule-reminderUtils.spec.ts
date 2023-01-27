@@ -12,6 +12,7 @@ import {getOneRandomCard} from '@tests/helpers';
 import moment from 'moment-timezone';
 import {getNextTimeForRepeating} from './rrule-reminderUtils';
 import {Day, Frequency} from '@ofModel/light-card.model';
+import {ex} from '@fullcalendar/core/internal-common';
 
 describe('RRuleReminderUtils:getNextTimeForRepeating with recurrence hour and minutes  ', () => {
     let testCard: Card;
@@ -150,7 +151,7 @@ describe('RRuleReminderUtils:getNextTimeForRepeating with recurrence hour and mi
     });
 });
 
-describe('RRuleReminderUtils:getNextTimeForRepeating hour/minutes/daysOfWeek   ', () => {
+fdescribe('RRuleReminderUtils:getNextTimeForRepeating hour/minutes/daysOfWeek   ', () => {
     let testCard: Card;
 
     beforeAll(() => {
@@ -281,8 +282,11 @@ describe('RRuleReminderUtils:getNextTimeForRepeating hour/minutes/daysOfWeek   '
         expect(dateForRepeating).toEqual(expectedResponseDate);
     });
 
-    it('2020/11/09 Monday 10:00 , Recurrence :10:30 / Saturday Sunday => 2020/11/14 Saturday 10:30 ', () => {
+    fit('2020/11/09 Monday 10:00 , Recurrence :10:30 / Saturday Sunday => 2020/11/14 Saturday 10:30 ', () => {
         const date = moment.tz('2020-11-09 10:00', 'Europe/Paris').valueOf();
+
+        console.error("Current date = ",new Date());
+        console.error("Date for test = ",new Date(date));
 
         testCard.rRule = {
             freq: Frequency.WEEKLY,
@@ -292,6 +296,7 @@ describe('RRuleReminderUtils:getNextTimeForRepeating hour/minutes/daysOfWeek   '
         };
 
         const expectedResponseDate = moment.tz('2020-11-14 10:30', 'Europe/Paris').valueOf();
+        console.error("Expected response date", new Date(expectedResponseDate));
         const dateForRepeating = getNextTimeForRepeating(testCard, date);
         expect(dateForRepeating).toEqual(expectedResponseDate);
     });

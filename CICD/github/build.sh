@@ -23,9 +23,11 @@ echo "node version $(node --version)"
 sdk version
 javac -version
 export GRADLE_OPTS="-XX:MaxMetaspaceSize=512m -Xmx2g"
+more ui/main/package-lock.json | grep rrule
 ./gradlew --version
 ./gradlew --build-cache copyDependencies test jacocoTestReport sonar dockerTag${OF_VERSION}
 status_code=$?
+more ui/main/package-lock.json | grep rrule
 docker-compose -f src/main/docker/test-environment/docker-compose.yml down
 # propage the status code for github actions 
 exit $status_code

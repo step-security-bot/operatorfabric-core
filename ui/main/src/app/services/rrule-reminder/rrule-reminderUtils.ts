@@ -96,8 +96,10 @@ export function getNextDateTimeFromRRule(startingDate: number, card: Card): numb
         rule = RRule.fromString(rule.toString() +
                                 ';DTSTART;TZID=' + tzid + ':' +
                                 dateObjectToYYYYMMDDTHHmmss(new Date(startingDate + NB_MILLISECONDS_IN_ONE_MINUTE)));
+        console.error("rule=",rule.toString());
 
         const nextDateTimeFromRRule = rule.all(function (date, i) {return i < 1})[0];
+        console.error("nextTimeForRepeating=",nextDateTimeFromRRule);
 
         // It is necessary to do this addition to have the right hour, maybe a bug of rrule.js here too...
         return (nextDateTimeFromRRule.valueOf() +

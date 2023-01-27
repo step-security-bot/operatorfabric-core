@@ -18,8 +18,25 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
 sudo apt-get install jq
 git config --global user.email "opfabtech@gmail.com" 
 git config --global user.name "OpfabTech"
+echo "Actual locale"
+locale
+echo "Available locale"
+locale -a
+echo "Installe locale FR"
+sudo locale-gen fr_FR
+sudo locale-gen fr_FR.UTF-8
+sudo update-locale
+echo "New Available locale"
+locale -a
+echo "set locale"
+LANG="fr_FR.utf8"
+export LANG
+echo "New locale"
+locale
+echo "env"
+env
 echo "Original computer date : "  
 date -R 
 sudo timedatectl set-timezone Europe/Paris
 echo "Modify computer date :" 
-date -R
+timedatectl
