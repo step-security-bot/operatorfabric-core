@@ -159,3 +159,6 @@ node-services/*/coverage
 node-services/*/logs
 
 bin/dependencies/report*.txt
+
+#test archives
+src/test/archives/node_modules
