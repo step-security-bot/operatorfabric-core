@@ -61,9 +61,10 @@ public class UserSettingsService {
         if (!checkFilteringNotificationIsAllowedForAllProcessesStates(login, userSettingsPatch))
             return new OperationResult<>(null, false, OperationResult.ErrorType.BAD_REQUEST,
                     FILTERING_NOTIFICATION_NOT_ALLOWED);
-
+        log.info("Patch user settings {} for login={} to do ", userSettingsPatch.toString() , login);
         UserSettings newSettings = ((UserSettingsData) oldSettings).patch(userSettingsPatch);
         userSettingsRepository.save(newSettings);
+        log.info("Patch user settings {} for login={} done ", userSettingsPatch.toString() , login);
 
         if ((userSettingsPatch.getProcessesStatesNotNotified() != null)
                 || (userSettingsPatch.getProcessesStatesNotifiedByEmail() != null)
