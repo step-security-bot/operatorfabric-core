@@ -14,11 +14,13 @@ import BusinessConfigOpfabServicesInterface from '../server-side/BusinessConfigO
 import CardsExternalDiffusionOpfabServicesInterface from '../server-side/cardsExternalDiffusionOpfabServicesInterface';
 import SendMailService from '../server-side/sendMailService';
 import ConfigDTO from './configDTO';
+import DailyCardsDiffusionControl from '../application/dailyCardsDiffusionControl';
 
 
 export default class CardsExternalDiffusionService {
 
     private cardsDiffusionControl: CardsDiffusionControl;
+    private dailyCardsDiffusionControl: DailyCardsDiffusionControl;
     private checkPeriodInSeconds: number;
     private active = false;
     private logger: any;
@@ -42,6 +44,18 @@ export default class CardsExternalDiffusionService {
             .setOpfabUrlInMailContent(serviceConfig.opfabUrlInMailContent)
             .setWindowInSecondsForCardSearch(serviceConfig.windowInSecondsForCardSearch)
             .setSecondsAfterPublicationToConsiderCardAsNotRead(serviceConfig.secondsAfterPublicationToConsiderCardAsNotRead);
+
+        this.dailyCardsDiffusionControl = new DailyCardsDiffusionControl()
+            .setLogger(logger)
+            .setOpfabServicesInterface(opfabServicesInterface)
+            .setOpfabBusinessConfigServicesInterface(opfabBusinessConfigServicesInterface)
+            .setCardsExternalDiffusionDatabaseService(cardsExternalDiffusionDatabaseService)
+            .setMailService(mailService)
+            .setFrom(serviceConfig.mailFrom)
+            .setSubjectPrefix(serviceConfig.subjectPrefix)
+            .setBodyPrefix(serviceConfig.bodyPrefix)
+            .setOpfabUrlInMailContent(serviceConfig.opfabUrlInMailContent)
+            .setDailyEmailTitle(serviceConfig.dailyEmailTitle);
 
         if (serviceConfig.activateCardsDiffusionRateLimiter) {
             const cardsDiffusionRateLimiter = new CardsDiffusionRateLimiter()
@@ -83,5 +97,16 @@ export default class CardsExternalDiffusionService {
                 .finally(() => setTimeout(() => this.checkRegularly(), this.checkPeriodInSeconds * 1000));
         }
         else setTimeout(() => this.checkRegularly(), this.checkPeriodInSeconds * 1000)
+    }
+
+    private checkDaily() {
+        if (this.active) {
+            this.logger.info('Daily check');
+            this.dailyCardsDiffusionControl
+                .checkCardsOfTheDay()
+                .catch((error) => this.logger.error('error during periodic check' + error))
+                .finally(() => setTimeout(() => this.checkDaily(), 24*60*60*1000));
+        }
+        else setTimeout(() => this.checkRegularly(), 24*60*60*1000 )
     }
 }
