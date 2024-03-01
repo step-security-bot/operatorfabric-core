@@ -615,6 +615,7 @@
       "confirmDelete": "Voulez-vous vraiment supprimer la configuration pour l'utilisateur",
       "allUsersConfigured": "Tous les périphériques des utilisateurs sont déjà configurés.",
       "loadingExternalDevices": "Chargement des périphériques externes...",
+      "confirmDeleteDevice": "Voulez-vous vraiment supprimer la périphérique",
       "host": {
         "required": "Serveur est obligatoire."
       },

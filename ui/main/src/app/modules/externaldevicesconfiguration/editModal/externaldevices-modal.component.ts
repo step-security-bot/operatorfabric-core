@@ -90,7 +90,6 @@ export class ExternaldevicesModalComponent implements OnInit {
         // `NgbModalRef.result` promise to trigger a refresh of the data shown on the table.
 
         const device = this.formToDevice();
-        debugger;
         ExternalDevicesService.updateDevice(this.formToDevice()).subscribe(() => {
             this.activeModal.close('Update button clicked on modal');
         });
